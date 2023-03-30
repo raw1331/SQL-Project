@@ -1,0 +1,842 @@
+9imysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| itv_student        |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sql_project        |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.01 sec)
+
+mysql> use sql_project;
+Database changed
+mysql> show tables;
++-----------------------+
+| Tables_in_sql_project |
++-----------------------+
+| products              |
++-----------------------+
+1 row in set (0.08 sec)
+
+mysql> select * from products;
+Empty set (0.76 sec)
+
+
+=======================================================================================================================================================================
+
+
+mysql> desc products;
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| ProductID         | int          | NO   | PRI | NULL    |       |
+| ProductName       | varchar(200) | NO   |     | NULL    |       |
+| PartNumber        | int          | NO   |     | NULL    |       |
+| ProductLable      | varchar(200) | YES  |     | NULL    |       |
+| StartingInventory | int          | YES  |     | NULL    |       |
+| InventoryReceived | int          | YES  |     | NULL    |       |
+| InventoryShipped  | int          | YES  |     | NULL    |       |
+| InventoryOnHand   | int          | YES  |     | NULL    |       |
+| MinimumRequird    | int          | NO   |     | NULL    |       |
++-------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.41 sec)
+
+mysql> create table Orders(
+    -> ID int not null auto_increment primary key,
+    -> Title varchar(200),
+    -> First varchar(200),
+    -> Middle varchar(200),
+    -> Last varchar(200),
+    -> ProductID int,
+    -> NUmberShipped int,
+    -> OrderDate Date,
+    -> foreign key(ProductID) references products(ID));
+Query OK, 0 rows affected (0.57 sec)
+
+
+
+mysql> desc orders;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| ID            | int          | NO   | PRI | NULL    | auto_increment |
+| Title         | varchar(200) | YES  |     | NULL    |                |
+| First         | varchar(200) | YES  |     | NULL    |                |
+| Middle        | varchar(200) | YES  |     | NULL    |                |
+| Last          | varchar(200) | YES  |     | NULL    |                |
+| ProductID     | int          | YES  | MUL | NULL    |                |
+| NUmberShipped | int          | YES  |     | NULL    |                |
+| OrderDate     | date         | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.01 sec)
+
+
+
+mysql> create table Purchases(
+    -> ID int not null auto_increment primary key,
+    -> SupplierID int not null,
+    -> ProductID int not null,
+    -> NumberRecived int not null,
+    -> PurchaseDate Date,
+    -> foreign key(supplierID) references suppliers(supplierID),
+    -> foreign key(ProductID) references products(productID));
+Query OK, 0 rows affected (1.69 sec)
+
+mysql> desc purchases;
++---------------+------+------+-----+---------+----------------+
+| Field         | Type | Null | Key | Default | Extra          |
++---------------+------+------+-----+---------+----------------+
+| ID            | int  | NO   | PRI | NULL    | auto_increment |
+| SupplierID    | int  | NO   | MUL | NULL    |                |
+| ProductID     | int  | NO   | MUL | NULL    |                |
+| NumberRecived | int  | NO   |     | NULL    |                |
+| PurchaseDate  | date | YES  |     | NULL    |                |
++---------------+------+------+-----+---------+----------------+
+5 rows in set (0.07 sec)
+
+
+
+
+mysql> create table Suppliers(
+    -> SupplierID int not null auto_increment primary key,
+    -> Supplier varchar(200));
+Query OK, 0 rows affected (2.77 sec)
+
+mysql> desc suppliers;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| SupplierID | int          | NO   | PRI | NULL    | auto_increment |
+| Supplier   | varchar(200) | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.04 sec)
+
+
++-----------------------+
+| Tables_in_sql_project |
++-----------------------+
+| orders                |
+| products              |
+| purchases             |
+| suppliers             |
++-----------------------+
+4 rows in set (1.46 sec)
+
+
+
+=======================================================================================================================================================================
+
+
+mysql> insert into products values
+    -> (1,'BMW','220i','sport',200,100,50,20,80);
+Query OK, 1 row affected (0.19 sec)
+
+1 row in set (0.00 sec)
+
+mysql> insert into products values
+    -> (2,'BMW','320d','Msport',250,60,50,30,80);
+Query OK, 1 row affected (0.14 sec)
+
+mysql> insert into products values
+    -> (3,'BMW','118d','BMW 118d',100,50,50,20,40),
+    -> (4,'BMW','125d','BMW1 125d',50,35,22,20,40),
+    -> (5,'BMW','118i','BMW1 118i',200,50,30,33,44),
+    -> (6,'HONDA','EX-L','SEDAN',300,20,50,45,75),
+    -> (7,'HONDA','DX','HONDA DX',250,100,66,45,10),
+    -> (8,'MAHIDRA','TUV','TUV300',500,250,160,29,50);
+Query OK, 6 rows affected (0.15 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+
+mysql> insert into products values
+    -> (9,'MAHIDRA','XUV','XUV500',500,230,65,79,45),
+    -> (10,'MAHIDRA','KUV','KUV100',120,230,45,85,90),
+    -> (11,'MAHIDRA','XUV','XUV700',252,68,13,54,95),
+    -> (12,'TATA','HARRIER','XZ2.0',100,25,63,10,15),
+    -> (13,'TATA','NEXON','XMA1',5,25,36,63,12,3),
+    -> (14,'TATA','TIAGO','XZA Plus',65,20,45,63,45),
+    -> (15,'TOYOTA','COROLLA','VLAT',200,230,65,79,54),
+    -> (16,'TOYOTA','ETIOS','V-20',100,30,60,20,50),
+    -> (17,'TOYOTA','ETIOS LIVA','VX',250,30,40,54,60),
+    -> (18,'TOYOTA','GLANZA','G-MT',100,12,34,56,24),
+    -> (19,'HYUNDAI','I20','ASTA12',65,40,56,65,10),
+    -> (20,'HYUNDAI','XCENT','S12',55,41,10,30,15),
+    -> (21,'HYUNDAI','I10','MAGNA1.2',500,241,320,69,70),
+    -> (22,'HYUNDAI','ELITE I20','ASTA 1.2',40,60,23,10,30),
+    -> (23,'MARUTI','ERTIGA','ZD1 PLUS',12,32,14,32,4),
+    -> (24,'MARUTI','DZIRE','VXT',1,2,45,65,20),
+    -> (25,'MARUTI','CIAZ','VDI',20,31,47,6,15),
+    -> (26,'MARUTI','CIAZ','SDI',15,64,47,10,100),
+    -> (27,'MARUTI','BALENO','ZETA',100,15,45,65,30),
+    -> (28,'MARUTI','WAGONAR','LXI',200,32,100,45,25),
+    -> (29,'FORD','FIESTA','XR2',100,20,30,65,15),
+    -> (30,'BMW','128i','BMW 128i',50,30,36,96,40);
+Query OK, 10 rows affected (0.17 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+mysql> select *from products;
++----+-------------+------------+--------------+-------------------+-------------------+------------------+-----------------+----------------+
+| ID | ProductName | partnumber | ProductLable | StartingInventory | InventoryReceived | InventoryShipped | InventoryOnHand | MinimumRequird |
++----+-------------+------------+--------------+-------------------+-------------------+------------------+-----------------+----------------+
+|  1 | BMW         | 220i       | sport        |               200 |               100 |               50 |              20 |             80 |
+|  2 | BMW         | 320d       | Msport       |               250 |                60 |               50 |              30 |             80 |
+|  3 | BMW         | 118d       | BMW 118d     |               100 |                50 |               50 |              20 |             40 |
+|  4 | BMW         | 125d       | BMW1 125d    |                50 |                35 |               22 |              20 |             40 |
+|  5 | BMW         | 118i       | BMW1 118i    |               200 |                50 |               30 |              33 |             44 |
+|  6 | HONDA       | EX-L       | SEDAN        |               300 |                20 |               50 |              45 |             75 |
+|  7 | HONDA       | DX         | HONDA DX     |               250 |               100 |               66 |              45 |             10 |
+|  8 | MAHIDRA     | TUV        | TUV300       |               500 |               250 |              160 |              29 |             50 |
+|  9 | MAHIDRA     | XUV        | XUV500       |               500 |               230 |               65 |              79 |             45 |
+| 10 | MAHIDRA     | KUV        | KUV100       |               120 |               230 |               45 |              85 |             90 |
+| 11 | MAHIDRA     | XUV        | XUV700       |               252 |                68 |               13 |              54 |             95 |
+| 12 | TATA        | HARRIER    | XZ2.0        |               100 |                25 |               63 |              10 |             15 |
+| 13 | TATA        | NEXON      | XMA1.5       |                25 |                36 |               63 |              12 |              3 |
+| 14 | TATA        | TIAGO      | XZA Plus     |                65 |                20 |               45 |              63 |             45 |
+| 15 | TOYOTA      | COROLLA    | VLAT         |               200 |               230 |               65 |              79 |             54 |
+| 16 | TOYOTA      | ETIOS      | V-20         |               100 |                30 |               60 |              20 |             50 |
+| 17 | TOYOTA      | ETIOS LIVA | VX           |               250 |                30 |               40 |              54 |             60 |
+| 18 | TOYOTA      | GLANZA     | G-MT         |               100 |                12 |               34 |              56 |             24 |
+| 19 | HYUNDAI     | I20        | ASTA12       |                65 |                40 |               56 |              65 |             10 |
+| 20 | HYUNDAI     | XCENT      | S12          |                55 |                41 |               10 |              30 |             15 |
+| 21 | HYUNDAI     | I10        | MAGNA1.2     |               500 |               241 |              320 |              69 |             70 |
+| 22 | HYUNDAI     | ELITE I20  | ASTA 1.2     |                40 |                60 |               23 |              10 |             30 |
+| 23 | MARUTI      | ERTIGA     | ZD1 PLUS     |                12 |                32 |               14 |              32 |              4 |
+| 24 | MARUTI      | DZIRE      | VXT          |                 1 |                 2 |               45 |              65 |             20 |
+| 25 | MARUTI      | CIAZ       | VDI          |                20 |                31 |               47 |               6 |             15 |
+| 26 | MARUTI      | CIAZ       | SDI          |                15 |                64 |               47 |              10 |            100 |
+| 27 | MARUTI      | BALENO     | ZETA         |               100 |                15 |               45 |              65 |             30 |
+| 28 | MARUTI      | WAGONAR    | LXI          |               200 |                32 |              100 |              45 |             25 |
+| 29 | FORD        | FIESTA     | XR2          |               100 |                20 |               30 |              65 |             15 |
+| 30 | BMW         | 128i       | BMW 128i     |                50 |                30 |               36 |              96 |             40 |
++----+-------------+------------+--------------+-------------------+-------------------+------------------+-----------------+----------------+
+30 rows in set (0.07 sec)
+
+
+
+insert into orders values
+(1,'Mr','Rohit','Rahul','Sharma',5,15,'2022-09-30'),
+(2,'Mr','Shikhar','Amit','Patil',12,32,'2023-01-15'),
+(3,'Mr','Aniket','Suresh','Patil',1,50,'2022-12-12'),
+(4,'Mrs','Rohini','Ajit','Jadhav',10,23,'2022-08-26'),
+(5,'Mr','Ankur','Pratap','Sigh',22,26,'2022-11-18'),
+(6,'Mr','Ajit','Kumar','Jagtap',30,30,'2022-04-16'),
+(7,'Mrs','Pooja','Arun','Patel',14,45,'2022-10-01'),
+(8,'Mr','Shubman','Ajay','Gill',20,50,'2022-06-10'),
+(9,'Mr','Vijay','Sadashiv','Patil',25,100,'2022-04-15'),
+(10,'Mr','Ajinkya','Omkar','Rahane',3,50,'2023-04-15'),
+(11,'Mrs','Pooja','Anant','Sawant',15,25,'2022-05-30'),
+(12,'Mr','Karn','Rakesh','Sharma',18,36,'2022-09-12'),
+(13,'Mrs','Shafali','Suresh','Verma',11,50,'2022-12-15'),
+(14,'Mrs','Radha','Vilas','Yadav',6,56,'2022-01-26'),
+(15,'Mr','Kuldeep','Rajesh','Yadav',13,78,'2022-01-15'),
+(16,'Mr','Axar','Hitesh','Patel',9,31,'2022-07-09'),
+(17,'Mr','Vikas','Vishnu','Pillay',23,50,'2022-08-15'),
+(18,'Mr','Surender','Rahul','Kumar',15,69,'2022-09-29'),
+(19,'Mr','Gurinder','Ankur','Singh',1,89,'2022-02-27'),
+(20,'Mr','Mohammed','Raheel','Mouseen',29,55,'2022-03-01'),s
+(21,'Mrs','Mithali','Ajay','Raj',4,56,'2022-02-01'),
+(22,'Mrs','Shafali','Ravi','Verma',7,89,'2022-01-15'),
+(23,'Mrs','Taniya','Arvind','Bhatia',8,45,'2022-04-15'),
+(24,'Mr','Sachin','Ramesh','Tendulkar',12,50,'2022-04-16'),
+(25,'Mr','Sunil','Manohar','Gavaskar',26,47,'2022-03-18'),
+(26,'Mr','Ajinkya','Madhukar','Rahane',10,59,'2022-04-30'),
+(27,'Mr','Cheteshwar','Arvind','Pujara',30,89,'2022-01-29'),
+(28,'Mrs','Pusarla','Venkata','Sindhu',14,46,'2022-02-01'),
+(29,'Mr','Rishabh','Rajendra','Pant',20,100,'2022-05-25'),
+(30,'Mr','Hardik','Himanshu','Pandya',18,20,'2022-05-15'),
+(31,'Mrs','Mithali','Dorai','Raj',11,60,'2022-07-23'),
+(32,'Mr','Ajit','Bhalchandra','Agarkar',23,25,'2022-02-18'),
+(33,'Mr','Jasprit','Jasbirsingh','Bumrah',24,65,'2022-01-27'),
+(34,'Mr','Shardul','Narendra','Thakur',27,60,'2023-04-26'),
+(35,'Mr','Ajit','Laxman','Wadekar',29,40,'2023-03-09'),
+(36,'Mr','Kannanur','Lokesh','Rahul',30,80,'2022-01-27'),
+(37,'Mr','Ishan','Pranav','Kishan',17,69,'2022-02-16'),
+(38,'Mr','Rahul','Sharad','Dravid',9,80,'2022-06-25'),
+(39,'Mr','Pankaj','Arjan','Advani',11,23,'2022-08-26'),
+(40,'Mr','Ajay','Ramchandra','Nikam',19,100,'2022-07-09');
+
+
+
+
+mysql> select * from orders;
++----+-------+------------+-------------+-----------+-----------+---------------+------------+
+| ID | Title | First      | Middle      | Last      | ProductID | NUmberShipped | OrderDate  |
++----+-------+------------+-------------+-----------+-----------+---------------+------------+
+|  1 | Mr    | Rohit      | Rahul       | Sharma    |         5 |            15 | 2022-09-30 |
+|  2 | Mr    | Shikhar    | Amit        | Patil     |        12 |            32 | 2023-01-15 |
+|  3 | Mr    | Aniket     | Suresh      | Patil     |         1 |            50 | 2022-12-12 |
+|  4 | Mrs   | Rohini     | Ajit        | Jadhav    |        10 |            23 | 2022-08-26 |
+|  5 | Mr    | Ankur      | Pratap      | Sigh      |        22 |            26 | 2022-11-18 |
+|  6 | Mr    | Ajit       | Kumar       | Jagtap    |        30 |            30 | 2022-04-16 |
+|  7 | Mrs   | Pooja      | Arun        | Patel     |        14 |            45 | 2022-10-01 |
+|  8 | Mr    | Shubman    | Ajay        | Gill      |        20 |            50 | 2022-06-10 |
+|  9 | Mr    | Vijay      | Sadashiv    | Patil     |        25 |           100 | 2022-04-15 |
+| 10 | Mr    | Ajinkya    | Omkar       | Rahane    |         3 |            50 | 2023-04-15 |
+| 11 | Mrs   | Pooja      | Anant       | Sawant    |        15 |            25 | 2022-05-30 |
+| 12 | Mr    | Karn       | Rakesh      | Sharma    |        18 |            36 | 2022-09-12 |
+| 13 | Mrs   | Shafali    | Suresh      | Verma     |        11 |            50 | 2022-12-15 |
+| 14 | Mrs   | Radha      | Vilas       | Yadav     |         6 |            56 | 2022-01-26 |
+| 15 | Mr    | Kuldeep    | Rajesh      | Yadav     |        13 |            78 | 2022-01-15 |
+| 16 | Mr    | Axar       | Hitesh      | Patel     |         9 |            31 | 2022-07-09 |
+| 17 | Mr    | Vikas      | Vishnu      | Pillay    |        23 |            50 | 2022-08-15 |
+| 18 | Mr    | Surender   | Rahul       | Kumar     |        15 |            69 | 2022-09-29 |
+| 19 | Mr    | Gurinder   | Ankur       | Singh     |         1 |            89 | 2022-02-27 |
+| 20 | Mr    | Mohammed   | Raheel      | Mouseen   |        29 |            55 | 2022-03-01 |
+| 21 | Mrs   | Mithali    | Ajay        | Raj       |         4 |            56 | 2022-02-01 |
+| 22 | Mrs   | Shafali    | Ravi        | Verma     |         7 |            89 | 2022-01-15 |
+| 23 | Mrs   | Taniya     | Arvind      | Bhatia    |         8 |            45 | 2022-04-15 |
+| 24 | Mr    | Sachin     | Ramesh      | Tendulkar |        12 |            50 | 2022-04-16 |
+| 25 | Mr    | Sunil      | Manohar     | Gavaskar  |        26 |            47 | 2022-03-18 |
+| 26 | Mr    | Ajinkya    | Madhukar    | Rahane    |        10 |            59 | 2022-04-30 |
+| 27 | Mr    | Cheteshwar | Arvind      | Pujara    |        30 |            89 | 2022-01-29 |
+| 28 | Mrs   | Pusarla    | Venkata     | Sindhu    |        14 |            46 | 2022-02-01 |
+| 29 | Mr    | Rishabh    | Rajendra    | Pant      |        20 |           100 | 2022-05-25 |
+| 30 | Mr    | Hardik     | Himanshu    | Pandya    |        18 |            20 | 2022-05-15 |
+| 31 | Mrs   | Mithali    | Dorai       | Raj       |        11 |            60 | 2022-07-23 |
+| 32 | Mr    | Ajit       | Bhalchandra | Agarkar   |        23 |            25 | 2022-02-18 |
+| 33 | Mr    | Jasprit    | Jasbirsingh | Bumrah    |        24 |            65 | 2022-01-27 |
+| 34 | Mr    | Shardul    | Narendra    | Thakur    |        27 |            60 | 2023-04-26 |
+| 35 | Mr    | Ajit       | Laxman      | Wadekar   |        29 |            40 | 2023-03-09 |
+| 36 | Mr    | Kannanur   | Lokesh      | Rahul     |        30 |            80 | 2022-01-27 |
+| 37 | Mr    | Ishan      | Pranav      | Kishan    |        17 |            69 | 2022-02-16 |
+| 38 | Mr    | Rahul      | Sharad      | Dravid    |         9 |            80 | 2022-06-25 |
+| 39 | Mr    | Pankaj     | Arjan       | Advani    |        11 |            23 | 2022-08-26 |
+| 40 | Mr    | Ajay       | Ramchandra  | Nikam     |        19 |           100 | 2022-07-09 |
++----+-------+------------+-------------+-----------+-----------+---------------+------------+
+40 rows in set (0.00 sec)
+
+
+
+
+mysql> insert into purchases values
+     
+    -> (1,2,5,20,'2022-12-16'),
+    -> (2,6,12,30,'2022-05-23'),
+    -> (3,4,7,40,'2023-01-12'),
+    -> (4,1,8,15,'2022-07-31'),
+    -> (5,7,15,35,'2022-05-12'),
+    -> (6,2,20,30,'2022-01-28'),
+    -> (7,5,17,25,'2023-02-26'),
+    -> (8,3,5,35,'2023-03-13'),
+    -> (9,5,26,44,'2022-12-01'),
+    -> (10,1,12,29,'2022-04-09'),
+    -> (11,6,25,29,'2022-09-26'),
+    -> (12,7,21,56,'2022-10-29'),
+    -> (13,4,8,19,'2023-3-19'),
+    -> (14,2,22,50,'2022-09-20'),
+    -> (15,1,30,59,'2022-12-31'),
+    -> (16,5,14,22,'2022-11-12'),
+    -> (17,6,17,65,'2022-04-04'),
+    -> (18,4,15,13,'2022-06-25'),
+    -> (19,2,8,25,'2022-01-01'),
+    -> (20,1,4,59,'2022-12-01'),
+    -> (21,6,3,79,'2022-08-13'),
+    -> (22,5,2,23,'2023-02-12'),
+    -> (23,7,1,40,'2022-12-12'),
+    -> (24,1,17,10,'2022-05-06'),
+    -> (25,2,20,50,'2022-09-15');
+Query OK, 25 rows affected (0.16 sec)
+Records: 25  Duplicates: 0  Warnings: 0
+
+mysql> select * from purchases;
++----+------------+-----------+---------------+--------------+
+| ID | SupplierID | ProductID | NumberRecived | PurchaseDate |
++----+------------+-----------+---------------+--------------+
+|  1 |          2 |         5 |            20 | 2022-12-06   |
+|  2 |          6 |        12 |            30 | 2022-05-23   |
+|  3 |          4 |         7 |            40 | 2023-01-12   |
+|  4 |          1 |         8 |            15 | 2022-07-31   |
+|  5 |          7 |        15 |            35 | 2022-05-12   |
+|  6 |          2 |        20 |            30 | 2022-01-28   |
+|  7 |          5 |        17 |            25 | 2023-02-26   |
+|  8 |          3 |         5 |            35 | 2023-03-13   |
+|  9 |          5 |        26 |            44 | 2022-12-01   |
+| 10 |          1 |        12 |            29 | 2022-04-09   |
+| 11 |          6 |        25 |            29 | 2022-09-26   |
+| 12 |          7 |        21 |            56 | 2022-10-29   |
+| 13 |          4 |         8 |            19 | 2023-03-19   |
+| 14 |          2 |        22 |            50 | 2022-09-20   |
+| 15 |          1 |        30 |            59 | 2022-12-31   |
+| 16 |          5 |        14 |            22 | 2022-11-12   |
+| 17 |          6 |        17 |            65 | 2022-04-04   |
+| 18 |          4 |        15 |            13 | 2022-06-25   |
+| 19 |          2 |         8 |            25 | 2022-01-01   |
+| 20 |          1 |         4 |            59 | 2022-12-01   |
+| 21 |          6 |         3 |            79 | 2022-08-13   |
+| 22 |          5 |         2 |            23 | 2023-02-12   |
+| 23 |          7 |         1 |            40 | 2022-12-12   |
+| 24 |          1 |        17 |            10 | 2022-05-06   |
+| 25 |          2 |        20 |            50 | 2022-09-15   |
++----+------------+-----------+---------------+--------------+
+25 rows in set (0.00 sec)
+
+
+mysql> insert into suppliers values
+    -> (1,'Classic Auto'),
+    -> (2,'Arihant Motors'),
+    -> (3,'Goldie Motors'),
+    -> (4,'Goldie Motors'),
+    -> (5,'Classic Cars Mumbai'),
+    -> (6,'Shaman Cars Pvt Ltd'),
+    -> (7,'Xpress Carz');
+Query OK, 7 rows affected (0.13 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from suppliers;
++----+---------------------+
+| ID | Supplier            |
++----+---------------------+
+|  1 | Classic Auto        |
+|  2 | Arihant Motors      |
+|  3 | Goldie Motors       |
+|  4 | Goldie Motors       |
+|  5 | Classic Cars Mumbai |
+|  6 | Shaman Cars Pvt Ltd |
+|  7 | Xpress Carz         |
++----+---------------------+
+7 rows in set (0.00 sec)
+
+=======================================================================================================================================================================
+
+mysql> alter table products
+    -> rename column ProductID to ID;
+Query OK, 0 rows affected (0.79 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc products;
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| ID                | int          | NO   | PRI | NULL    |       |
+| ProductName       | varchar(200) | NO   |     | NULL    |       |
+| PartNumber        | int          | NO   |     | NULL    |       |
+| ProductLable      | varchar(200) | YES  |     | NULL    |       |
+| StartingInventory | int          | YES  |     | NULL    |       |
+| InventoryReceived | int          | YES  |     | NULL    |       |
+| InventoryShipped  | int          | YES  |     | NULL    |       |
+| InventoryOnHand   | int          | YES  |     | NULL    |       |
+| MinimumRequird    | int          | NO   |     | NULL    |       |
++-------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.05 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select first,last,numbershipped from orders
+    -> where numbershipped between 40 and 60;
++----------+-----------+---------------+
+| first    | last      | numbershipped |
++----------+-----------+---------------+
+| Aniket   | Patil     |            50 |
+| Pooja    | Patel     |            45 |
+| Shubman  | Gill      |            50 |
+| Ajinkya  | Rahane    |            50 |
+| Shafali  | Verma     |            50 |
+| Radha    | Yadav     |            56 |
+| Vikas    | Pillay    |            50 |
+| Mohammed | Mouseen   |            55 |
+| Mithali  | Raj       |            56 |
+| Taniya   | Bhatia    |            45 |
+| Sachin   | Tendulkar |            50 |
+| Sunil    | Gavaskar  |            47 |
+| Ajinkya  | Rahane    |            59 |
+| Pusarla  | Sindhu    |            46 |
+| Mithali  | Raj       |            60 |
+| Shardul  | Thakur    |            60 |
+| Ajit     | Wadekar   |            40 |
++----------+-----------+---------------+
+17 rows in set (0.00 sec)
+
+
+
+
+=======================================================================================================================================================================
+
+
+mysql> select count(numberrecived)
+    -> from purchases;
++----------------------+
+| count(numberrecived) |
++----------------------+
+|                   25 |
++----------------------+
+1 row in set (0.31 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select date_format(orderdate, '%d/%M/%Y')
+    -> from  orders
+    -> limit 15;
++------------------------------------+
+| date_format(orderdate, '%d/%M/%Y') |
++------------------------------------+
+| 30/September/2022                  |
+| 15/January/2023                    |
+| 12/December/2022                   |
+| 26/August/2022                     |
+| 18/November/2022                   |
+| 16/April/2022                      |
+| 01/October/2022                    |
+| 10/June/2022                       |
+| 15/April/2022                      |
+| 15/April/2023                      |
+| 30/May/2022                        |
+| 12/September/2022                  |
+| 15/December/2022                   |
+| 26/January/2022                    |
+| 15/January/2022                    |
++------------------------------------+
+15 rows in set (0.00 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select id,productname,minimumrequird from products
+    -> where minimumrequird < 50;
++----+-------------+----------------+
+| id | productname | minimumrequird |
++----+-------------+----------------+
+|  3 | BMW         |             40 |
+|  4 | BMW         |             40 |
+|  5 | BMW         |             44 |
+|  7 | HONDA       |             10 |
+|  9 | MAHIDRA     |             45 |
+| 12 | TATA        |             15 |
+| 13 | TATA        |              3 |
+| 14 | TATA        |             45 |
+| 18 | TOYOTA      |             24 |
+| 19 | HYUNDAI     |             10 |
+| 20 | HYUNDAI     |             15 |
+| 22 | HYUNDAI     |             30 |
+| 23 | MARUTI      |              4 |
+| 24 | MARUTI      |             20 |
+| 25 | MARUTI      |             15 |
+| 27 | MARUTI      |             30 |
+| 28 | MARUTI      |             25 |
+| 29 | FORD        |             15 |
+| 30 | BMW         |             40 |
++----+-------------+----------------+
+19 rows in set (0.00 sec)
+
+
+
+=======================================================================================================================================================================
+
+mysql> select id,first,middle,last from orders
+    -> where first like 's%' and last like '%a';
++----+---------+--------+-------+
+| id | first   | middle | last  |
++----+---------+--------+-------+
+| 13 | Shafali | Suresh | Verma |
+| 22 | Shafali | Ravi   | Verma |
++----+---------+--------+-------+
+2 rows in set (0.00 sec)              
+
+
+=======================================================================================================================================================================
+
+mysql> select id,ProductName,partnumber,InventoryOnHand
+    -> from products
+    -> where InventoryOnHand =(select max(InventoryOnHand)from products);
++----+-------------+------------+-----------------+
+| id | ProductName | partnumber | InventoryOnHand |
++----+-------------+------------+-----------------+
+| 30 | BMW         | 128i       |              96 |
++----+-------------+------------+-----------------+
+1 row in set (0.00 sec)
+
+
+=======================================================================================================================================================================
+
+
+mysql> select max(InventoryOnHand)from products;
++----------------------+
+| max(InventoryOnHand) |
++----------------------+
+|                   96 |
++----------------------+
+1 row in set (0.19 sec)
+
+mysql> select min(InventoryOnHand)from products;
++----------------------+
+| min(InventoryOnHand) |
++----------------------+
+|                    6 |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(InventoryOnHand)from products;
++----------------------+
+| avg(InventoryOnHand) |
++----------------------+
+|              43.7333 |
++----------------------+
+1 row in set (0.06 sec)
+
+mysql> select sum(InventoryOnHand)from products;
++----------------------+
+| sum(InventoryOnHand) |
++----------------------+
+|                 1312 |
++----------------------+
+1 row in set (0.00 sec)
+
+
+=======================================================================================================================================================================
+
+
+mysql> alter table products
+    -> modify column partnumber varchar(200);
+Query OK, 0 rows affected (3.70 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc products;
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| ID                | int          | NO   | PRI | NULL    |       |
+| ProductName       | varchar(200) | NO   |     | NULL    |       |
+| partnumber        | varchar(200) | YES  |     | NULL    |       |
+| ProductLable      | varchar(200) | YES  |     | NULL    |       |
+| StartingInventory | int          | YES  |     | NULL    |       |
+| InventoryReceived | int          | YES  |     | NULL    |       |
+| InventoryShipped  | int          | YES  |     | NULL    |       |
+| InventoryOnHand   | int          | YES  |     | NULL    |       |
+| MinimumRequird    | int          | NO   |     | NULL    |       |
++-------------------+--------------+------+-----+---------+-------+
+9 rows in set (0.01 sec)
+
+=======================================================================================================================================================================
+
+mysql> select date_format(PurchaseDate, '%M') as Month
+    -> from purchases
+    -> limit 15;
++-----------+
+| Month     |
++-----------+
+| December  |
+| May       |
+| January   |
+| July      |
+| May       |
+| January   |
+| February  |
+| March     |
+| December  |
+| April     |
+| September |
+| October   |
+| March     |
+| September |
+| December  |
++-----------+
+15 rows in set (0.09 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select * from orders
+    -> where first like 'a__%'
+    -> order by id asc;
++----+-------+---------+-------------+---------+-----------+---------------+------------+
+| ID | Title | First   | Middle      | Last    | ProductID | NUmberShipped | OrderDate  |
++----+-------+---------+-------------+---------+-----------+---------------+------------+
+|  3 | Mr    | Aniket  | Suresh      | Patil   |         1 |            50 | 2022-12-12 |
+|  5 | Mr    | Ankur   | Pratap      | Sigh    |        22 |            26 | 2022-11-18 |
+|  6 | Mr    | Ajit    | Kumar       | Jagtap  |        30 |            30 | 2022-04-16 |
+| 10 | Mr    | Ajinkya | Omkar       | Rahane  |         3 |            50 | 2023-04-15 |
+| 16 | Mr    | Axar    | Hitesh      | Patel   |         9 |            31 | 2022-07-09 |
+| 26 | Mr    | Ajinkya | Madhukar    | Rahane  |        10 |            59 | 2022-04-30 |
+| 32 | Mr    | Ajit    | Bhalchandra | Agarkar |        23 |            25 | 2022-02-18 |
+| 35 | Mr    | Ajit    | Laxman      | Wadekar |        29 |            40 | 2023-03-09 |
+| 40 | Mr    | Ajay    | Ramchandra  | Nikam   |        19 |           100 | 2022-07-09 |
++----+-------+---------+-------------+---------+-----------+---------------+------------+
+9 rows in set (0.00 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select upper(first),lower(last)
+    -> from orders
+    -> limit 15;
++--------------+-------------+
+| upper(first) | lower(last) |
++--------------+-------------+
+| ROHIT        | sharma      |
+| SHIKHAR      | patil       |
+| ANIKET       | patil       |
+| ROHINI       | jadhav      |
+| ANKUR        | sigh        |
+| AJIT         | jagtap      |
+| POOJA        | patel       |
+| SHUBMAN      | gill        |
+| VIJAY        | patil       |
+| AJINKYA      | rahane      |
+| POOJA        | sawant      |
+| KARN         | sharma      |
+| SHAFALI      | verma       |
+| RADHA        | yadav       |
+| KULDEEP      | yadav       |
++--------------+-------------+
+15 rows in set (0.11 sec)
+
+
+
+=======================================================================================================================================================================
+
+mysql> select * from products
+    -> where productname='bmw';
++----+-------------+------------+--------------+-------------------+-------------------+------------------+-----------------+----------------+
+| ID | ProductName | partnumber | ProductLable | StartingInventory | InventoryReceived | InventoryShipped | InventoryOnHand | MinimumRequird |
++----+-------------+------------+--------------+-------------------+-------------------+------------------+-----------------+----------------+
+|  1 | BMW         | 220i       | sport        |               200 |               100 |               50 |              20 |             80 |
+|  2 | BMW         | 320d       | Msport       |               250 |                60 |               50 |              30 |             80 |
+|  3 | BMW         | 118d       | BMW 118d     |               100 |                50 |               50 |              20 |             40 |
+|  4 | BMW         | 125d       | BMW1 125d    |                50 |                35 |               22 |              20 |             40 |
+|  5 | BMW         | 118i       | BMW1 118i    |               200 |                50 |               30 |              33 |             44 |
+| 30 | BMW         | 128i       | BMW 128i     |                50 |                30 |               36 |              96 |             40 |
++----+-------------+------------+--------------+-------------------+-------------------+------------------+-----------------+----------------+
+6 rows in set (0.13 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select productname,partnumber from products
+    -> where productname = 'bmw';
++-------------+------------+
+| productname | partnumber |
++-------------+------------+
+| BMW         | 220i       |
+| BMW         | 320d       |
+| BMW         | 118d       |
+| BMW         | 125d       |
+| BMW         | 118i       |
+| BMW         | 128i       |
++-------------+------------+
+6 rows in set (0.07 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select orders.first,products.productname
+    -> from orders inner join products
+    -> on orders.productid=products.id
+    -> limit 15;
++---------+-------------+
+| first   | productname |
++---------+-------------+
+| Rohit   | BMW         |
+| Shikhar | TATA        |
+| Aniket  | BMW         |
+| Rohini  | MAHIDRA     |
+| Ankur   | HYUNDAI     |
+| Ajit    | BMW         |
+| Pooja   | TATA        |
+| Shubman | HYUNDAI     |
+| Vijay   | MARUTI      |
+| Ajinkya | BMW         |
+| Pooja   | TOYOTA      |
+| Karn    | TOYOTA      |
+| Shafali | MAHIDRA     |
+| Radha   | HONDA       |
+| Kuldeep | TATA        |
++---------+-------------+
+15 rows in set (0.00 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select purchases.purchasedate,products.partnumber
+    -> from purchases inner join products
+    -> on purchases.productid=products.id
+    -> limit 15;
++--------------+------------+
+| purchasedate | partnumber |
++--------------+------------+
+| 2022-12-06   | 118i       |
+| 2022-05-23   | HARRIER    |
+| 2023-01-12   | DX         |
+| 2022-07-31   | TUV        |
+| 2022-05-12   | COROLLA    |
+| 2022-01-28   | XCENT      |
+| 2023-02-26   | ETIOS LIVA |
+| 2023-03-13   | 118i       |
+| 2022-12-01   | CIAZ       |
+| 2022-04-09   | HARRIER    |
+| 2022-09-26   | CIAZ       |
+| 2022-10-29   | I10        |
+| 2023-03-19   | TUV        |
+| 2022-09-20   | ELITE I20  |
+| 2022-12-31   | 128i       |
++--------------+------------+
+15 rows in set (0.09 sec)
+
+
+
+=======================================================================================================================================================================
+
+mysql> select purchases.purchasedate,products.partnumber
+    -> from purchases right join products
+    -> on purchases.productid=products.id
+    -> limit 15
+    -> ;
++--------------+------------+
+| purchasedate | partnumber |
++--------------+------------+
+| 2022-12-12   | 220i       |
+| 2023-02-12   | 320d       |
+| 2022-08-13   | 118d       |
+| 2022-12-01   | 125d       |
+| 2022-12-06   | 118i       |
+| 2023-03-13   | 118i       |
+| NULL         | EX-L       |
+| 2023-01-12   | DX         |
+| 2022-07-31   | TUV        |
+| 2023-03-19   | TUV        |
+| 2022-01-01   | TUV        |
+| NULL         | XUV        |
+| NULL         | KUV        |
+| NULL         | XUV        |
+| 2022-05-23   | HARRIER    |
++--------------+------------+
+15 rows in set (0.05 sec)
+
+
+=======================================================================================================================================================================
+
+mysql> select orders.id,products.productname
+    -> from orders left join products
+    -> on orders.productid=products.id
+    -> limit 15;
++----+-------------+
+| id | productname |
++----+-------------+
+|  3 | BMW         |
+| 19 | BMW         |
+| 10 | BMW         |
+| 21 | BMW         |
+|  1 | BMW         |
+| 14 | HONDA       |
+| 22 | HONDA       |
+| 23 | MAHIDRA     |
+| 16 | MAHIDRA     |
+| 38 | MAHIDRA     |
+|  4 | MAHIDRA     |
+| 26 | MAHIDRA     |
+| 13 | MAHIDRA     |
+| 31 | MAHIDRA     |
+| 39 | MAHIDRA     |
++----+-------------+
+15 rows in set (0.00 sec)
+
+
+=======================================================================================================================================================================
+
+
